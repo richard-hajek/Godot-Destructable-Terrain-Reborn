@@ -10,10 +10,14 @@ config_version=5
 
 [application]
 
-config/name="Stronghold"
-run/main_scene="res://scenes/World.tscn"
+config/name="DestroyableTerrainReborn"
+run/main_scene="res://SceneName.tscn"
 config/features=PackedStringArray("4.1")
 config/icon="res://icon.png"
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/destroableterrainreborn/plugin.cfg")
 
 [input]
 

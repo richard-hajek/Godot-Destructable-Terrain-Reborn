@@ -1,8 +1,8 @@
 [gd_scene load_steps=2 format=3 uid="uid://cod0mdu831es2"]
 
-[ext_resource type="Script" path="res://scripts/World.gd" id="1"]
+[ext_resource type="Script" path="res://addons/destroableterrainreborn/scripts/World.gd" id="1_8dsdd"]
 
 [node name="World" type="Node2D"]
-script = ExtResource("1")
+script = ExtResource("1_8dsdd")
 
 [node name="Chunks" type="Node" parent="."]

@@ -1,11 +1,12 @@
 extends Node2D
 
-const CHUNK := preload("res://scenes/Chunk.tscn")
+const CHUNK := preload("res://addons/destroableterrainreborn/scenes/Chunk.tscn")
 const CHUNK_SIZE := 8
 const SQUARE_SIZE := 16
 
 @export var height := 64
 @export var width := 64
+@export var random_initialize := true
 var v_chunks: int = ceil(float(height) / float(CHUNK_SIZE))
 var h_chunks: int = ceil(float(width) / float(CHUNK_SIZE))
 var chunks := []
@@ -14,14 +15,20 @@ var altered_chunks := {}
 
 func _ready() -> void:
 	get_tree().debug_collisions_hint = true
-	randomize()
-	generate_world(_get_noise(randi()))
+	
+	var Chunks = Node.new()
+	Chunks.name = "Chunks"
+	add_child(Chunks)
+	
+	if random_initialize:
+		randomize()
+		generate_world(_get_noise(randi()))
 
 func _process(delta_time: float) -> void:
 	if(Input.is_action_just_pressed("debug_mouse")):
 		#get_child(1).position = get_global_mouse_position()
 		#var pos = (get_global_mouse_position() / SQUARE_SIZE).round()
-#		print(pos)
+		#print(pos)
 		explosion(get_global_mouse_position(), 50.0, -1.0)
 		var z = (get_global_mouse_position() / SQUARE_SIZE).round()
 		set_vertex(z.y, z.x, -0.1, true)
