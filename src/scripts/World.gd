@@ -4,8 +4,8 @@ const CHUNK := preload("res://scenes/Chunk.tscn")
 const CHUNK_SIZE := 8
 const SQUARE_SIZE := 16
 
-export var height := 64
-export var width := 64
+@export var height := 64
+@export var width := 64
 var v_chunks: int = ceil(float(height) / float(CHUNK_SIZE))
 var h_chunks: int = ceil(float(width) / float(CHUNK_SIZE))
 var chunks := []
@@ -19,17 +19,17 @@ func _ready() -> void:
 
 func _process(delta_time: float) -> void:
 	if(Input.is_action_just_pressed("debug_mouse")):
-		get_child(1).position = get_global_mouse_position()
-		var pos = (get_global_mouse_position() / SQUARE_SIZE).round()
+		#get_child(1).position = get_global_mouse_position()
+		#var pos = (get_global_mouse_position() / SQUARE_SIZE).round()
 #		print(pos)
-#		explosion(get_global_mouse_position(), 50.0, -1.0)
-#		var z = (get_global_mouse_position() / SQUARE_SIZE).round()
-#		set_vertex(z.y, z.x, -0.1, true)
-#		for chunk in $Chunks.get_children():
-#			chunk.initalize_mesh()
+		explosion(get_global_mouse_position(), 50.0, -1.0)
+		var z = (get_global_mouse_position() / SQUARE_SIZE).round()
+		set_vertex(z.y, z.x, -0.1, true)
+		for chunk in $Chunks.get_children():
+			chunk.initalize_mesh()
 	if(Input.is_action_just_pressed("debug_mouse2")):
 		explosion(get_global_mouse_position(), 50.0, 1.0)
-	update()
+	#update()
 	#print(Engine.get_frames_per_second())
 
 func _draw() -> void:
@@ -48,11 +48,11 @@ func _draw() -> void:
 
 
 func _get_noise(noise_seed: int) -> Array:  #priv mark?
-	var noise := OpenSimplexNoise.new()
+	var noise := FastNoiseLite.new()
 	noise.seed = noise_seed
-	noise.octaves = 2
-	noise.persistence = 0.9
-	noise.period = 17.0
+	noise.fractal_octaves = 2
+	#noise.persistence = 0.9
+	#noise.period = 17.0
 	var n_max := 0.0
 	var n_avg := 0.0
 	for i in range(height):
@@ -77,7 +77,7 @@ func generate_world(terrain_data: Array) -> void:
 		chunks[i] = []
 		chunks[i].resize(h_chunks)
 		for j in range(h_chunks):
-			chunks[i][j] = CHUNK.instance()
+			chunks[i][j] = CHUNK.instantiate()
 			chunks[i][j].set_size(CHUNK_SIZE, SQUARE_SIZE)
 			chunks[i][j].position = Vector2(j, i) * CHUNK_SIZE * SQUARE_SIZE
 			for k in range(CHUNK_SIZE + 1):
@@ -131,7 +131,7 @@ func update_chunks(): #unoptimized debug function
 func explosion(location: Vector2, radius: float, intensity: float) -> void:
 	radius /= SQUARE_SIZE
 	location /= SQUARE_SIZE
-	var cell_radius := ceil(radius) + 1
+	var cell_radius := float(ceil(radius)) + 1
 	var current := location.round() - Vector2(cell_radius, cell_radius)
 	for i in range(cell_radius * 2):
 		for j in range(cell_radius * 2):
